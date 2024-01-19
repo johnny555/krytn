@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="Cafe">
+    <static>true</static>
+    <link name="link">
+      <collision name="main_floor">
+        <pose>-0.4 -0.75 0.0948 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>9.38 22.63 0.19</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://gamecity/meshes/gamecity_full.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

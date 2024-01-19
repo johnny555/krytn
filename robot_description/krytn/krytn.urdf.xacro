@@ -2,23 +2,21 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="krytn">
 
 <!-- Set this variable to True to setup for use with Gazebo simulation. -->
-<xacro:arg name="gazebo" default="true" /> 
+<xacro:arg name="gazebo" default="True" /> 
 
 <!-- Import and add robot components -->
 <xacro:include filename="$(find krytn)/robot_description/magni/magni.urdf.xacro" />
 
-
-
 <!-- Configure Control of Joints -->
 <ros2_control name="magni" type="system">
 
-        <xacro:if value="$(arg gazebo)">
+        <xacro:if value="${$(arg gazebo) == True}">
                 <hardware>
                         <plugin>ign_ros2_control/IgnitionSystem</plugin>
                 </hardware>
         </xacro:if>
 
-        <xacro:if value="not $(arg gazebo)">
+        <xacro:if value="${not $(arg gazebo)}">
                 <hardware>        
                         <plugin>ubiquity_motor/UbiquityMotorSystemHardware</plugin>
                         <param name="serial_port">/dev/serial0</param>
@@ -61,7 +59,7 @@
                         <remapping>/diff_drive_base_controller/tf_odometry:=tf</remapping>
                         <remapping>/diff_drive_base_controller/cmd_vel_unstamped:=cmd_vel</remapping>
                 </ros>
-                <parameters>$(find haul_truck)/config/diffdrive_control.yaml</parameters>
+                <parameters>$(find krytn)/config/diffdrive_control.yaml</parameters>
         </plugin>
   
         <plugin filename="ignition-gazebo-sensors-system" name="ignition::gazebo::systems::Sensors">
