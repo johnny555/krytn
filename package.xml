@@ -7,8 +7,16 @@
   <maintainer email="badwolf.johnnyv@gmail.com">ros</maintainer>
   <license>MIT</license>
 
-  
+
   <depend>rqt_robot_steering</depend>
+  <depend>slam_toolbox</depend>
+  <depend>navigation2</depend>
+  <depend>nav2_bringup</depend>
+  <depend>ros2_control</depend>
+  <depend>ign_ros2_control</depend>
+  <depend>ros2_controllers</depend>
+  <depend>realsense2-description</depend>
+
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

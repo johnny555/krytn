@@ -7,10 +7,8 @@ from launch.substitutions import Command
 
 def generate_launch_description():
 
-    models_path = join(get_package_share_directory("krytn"), "models")
-
     # Start a simulation with the cafe world
-    cafe_world_uri = join(models_path,"simple_cafe.sdf")
+    cafe_world_uri = join(get_package_share_directory("krytn"), "models", "gamecity_world.sdf")
     path = join(get_package_share_directory("ros_gz_sim"), "launch", "gz_sim.launch.py")
     
     gazebo_sim = IncludeLaunchDescription(path,
@@ -57,4 +55,22 @@ def generate_launch_description():
         executable="rqt_robot_steering",
     )
 
-    return LaunchDescription([gazebo_sim, bridge, robot, robot_steering, robot_state_publisher])
+    # Step 5: Enable the ros2 controllers
+
+    load_joint_state_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'joint_state_broadcaster'],
+        output='screen'
+    )
+
+    load_diff_drive_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'diff_drive_base_controller'],
+        output='screen'
+    )
+
+
+    return LaunchDescription([gazebo_sim, bridge, robot, 
+                              robot_steering, robot_state_publisher,
+                              load_joint_state_controller,
+                              load_diff_drive_controller])

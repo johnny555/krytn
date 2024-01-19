@@ -1,72 +1,205 @@
 <?xml version='1.0' encoding='utf-8'?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="krytn">
 
-<!-- Set this variable to True to setup for use with Gazebo simulation. -->
-<xacro:arg name="gazebo" default="True" /> 
+  <!-- Set this variable to True to setup for use with Gazebo simulation. -->
+  <xacro:arg name="gazebo" default="True" />
 
-<!-- Import and add robot components -->
-<xacro:include filename="$(find krytn)/robot_description/magni/magni.urdf.xacro" />
+  <!-- Import and add robot components -->
+  <xacro:include filename="$(find krytn)/robot_description/magni/magni.urdf.xacro" />
+  <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro" />
+  <!-- Including realsense description from external package -->
+  <xacro:sensor_d435i parent="base_link" name="sensor_d435i" use_nominal_extrinsics="$(arg gazebo)">
+    <origin xyz="0 0 0.3" rpy="0 0 0"/>
+  </xacro:sensor_d435i>
 
-<!-- Configure Control of Joints -->
-<ros2_control name="magni" type="system">
+  <!-- Adding a simple rplidar for collision avoidance.  -->
+  <link name="rplidar">
+    <xacro:cylinder_inertial_with_origin radius="0.02" length="0.35" mass="0.13">
+      <origin xyz="0 0 0.03" rpy="0 ${pi/2} 0" />
+    </xacro:cylinder_inertial_with_origin>
 
-        <xacro:if value="${$(arg gazebo) == True}">
-                <hardware>
-                        <plugin>ign_ros2_control/IgnitionSystem</plugin>
-                </hardware>
-        </xacro:if>
-
-        <xacro:if value="${not $(arg gazebo)}">
-                <hardware>        
-                        <plugin>ubiquity_motor/UbiquityMotorSystemHardware</plugin>
-                        <param name="serial_port">/dev/serial0</param>
-                        <param name="baud_rate">38400</param>
-                        <param name="left_wheel_joint_name">left_wheel_joint</param>
-                        <param name="right_wheel_joint_name">right_wheel_joint</param>
-                </hardware>
-                <gpio name="magni_IOs">
-                        <state_interface name="battery_voltage"/>
-                </gpio> 
-        </xacro:if>
-
-        <joint name="left_wheel_joint">
-                <command_interface name="velocity">
-                        <param name="min">-1</param>
-                        <param name="max">1</param>
-                </command_interface>
-                <state_interface name="position"/>
-                <state_interface name="velocity"/>
-        </joint>
-
-        <joint name="right_wheel_joint">
-                <command_interface name="velocity">
-                        <param name="min">-1</param>
-                        <param name="max">1</param>
-                </command_interface>
-
-                <state_interface name="position"/>
-                <state_interface name="velocity"/>
-        </joint>
-</ros2_control>
+    <collision name="collision_base">
+      <pose>0 0 0.0175015175 0 0 0</pose>
+      <geometry>
+        <box size="0.05001062 0.05001062 0.035003035"/>
+      </geometry>
+    </collision>
+    <collision name="collision_top">
+      <pose>0 0 0.0525045525 0 0 0</pose>
+      <geometry>
+        <cylinder radius="0.02" length="0.035003035" />
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <pose>0 0 0 0 0 1.5707</pose>
+      <geometry>
+        <mesh filename="file://$(find krytn)/robot_description/krytn/meshes/lidar_2d_v1.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="rplidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rplidar"/>
+    <origin xyz="-0.093 0 0.158" rpy="0 0 0"/>
+  </joint>
 
 
-<!-- Setup Gazebo plugins -->
-<xacro:if value="$(arg gazebo)">
+  <!-- Configure Control of Joints -->
+  <ros2_control name="magni" type="system">
+
+    <xacro:if value="${$(arg gazebo) == True}">
+      <hardware>
+        <plugin>ign_ros2_control/IgnitionSystem</plugin>
+      </hardware>
+    </xacro:if>
+
+    <xacro:if value="${not $(arg gazebo)}">
+      <hardware>
+        <plugin>ubiquity_motor/UbiquityMotorSystemHardware</plugin>
+        <param name="serial_port">/dev/serial0</param>
+        <param name="baud_rate">38400</param>
+        <param name="left_wheel_joint_name">left_wheel_joint</param>
+        <param name="right_wheel_joint_name">right_wheel_joint</param>
+      </hardware>
+      <gpio name="magni_IOs">
+        <state_interface name="battery_voltage"/>
+      </gpio>
+    </xacro:if>
+
+    <joint name="left_wheel_joint">
+      <command_interface name="velocity">
+        <param name="min">-1</param>
+        <param name="max">1</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="right_wheel_joint">
+      <command_interface name="velocity">
+        <param name="min">-1</param>
+        <param name="max">1</param>
+      </command_interface>
+
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <!-- Setup Gazebo plugins -->
+  <xacro:if value="$(arg gazebo)">
     <gazebo>
-        <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
-                <ros>
-                        <remapping>/diff_drive_base_controller/odometry:=odom</remapping>
-                        <remapping>/diff_drive_base_controller/tf_odometry:=tf</remapping>
-                        <remapping>/diff_drive_base_controller/cmd_vel_unstamped:=cmd_vel</remapping>
-                </ros>
-                <parameters>$(find krytn)/config/diffdrive_control.yaml</parameters>
-        </plugin>
-  
-        <plugin filename="ignition-gazebo-sensors-system" name="ignition::gazebo::systems::Sensors">
-                <render_engine>ogre2</render_engine>
-        </plugin>
-  
-    </gazebo>
-</xacro:if>
+      <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+        <ros>
+          <remapping>/diff_drive_base_controller/odometry:=odom</remapping>
+          <remapping>/diff_drive_base_controller/tf_odometry:=tf</remapping>
+          <remapping>/diff_drive_base_controller/cmd_vel_unstamped:=cmd_vel</remapping>
+        </ros>
+        <parameters>$(find krytn)/config/diffdrive_control.yaml</parameters>
+      </plugin>
 
+      <plugin filename="ignition-gazebo-imu-system" name="gz::sim::systems::Imu">
+      </plugin>
+
+      <plugin filename="ignition-gazebo-sensors-system" name="ignition::gazebo::systems::Sensors">
+        <render_engine>ogre2</render_engine>
+      </plugin>
+    </gazebo>
+
+    <!-- Add sensor tags to Realsense links -->
+    <gazebo reference="sensor_d435i">
+      <sensor name="realsense_d435" type="rgbd_camera">
+        <topic>realsense</topic>
+        <ignition_frame_id>realsense_d435</ignition_frame_id>
+        <update_rate>5</update_rate>
+        <camera name="camera">
+          <horizontal_fov>0.5</horizontal_fov>
+          <lens>
+            <intrinsics>
+              <!-- fx = fy = width / ( 2 * tan (hfov / 2 ) ) -->
+              <fx>554.25469</fx>
+              <fy>554.25469</fy>
+              <!-- cx = ( width + 1 ) / 2 -->
+              <cx>320.5</cx>
+              <!-- cy = ( height + 1 ) / 2 -->
+              <cy>240.5</cy>
+              <s>0</s>
+            </intrinsics>
+          </lens>
+          <distortion>
+            <k1>0.0</k1>
+            <k2>0.0</k2>
+            <k3>0.0</k3>
+            <p1>0.0</p1>
+            <p2>0.0</p2>
+            <center>0.5 0.5</center>
+          </distortion>
+          <image>
+            <width>160</width>
+            <height>120</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>10</far>
+          </clip>
+          <depth_camera>
+            <clip>
+              <near>0.1</near>
+              <far>10</far>
+            </clip>
+          </depth_camera>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="sensor_d435i_accel_frame">
+      <sensor name="imu" type="imu">
+        <always_on>1</always_on>
+        <update_rate>100</update_rate>
+        <visualize>true</visualize>
+        <topic>imu</topic>
+        <enable_metrics>true</enable_metrics>
+      </sensor>
+    </gazebo>
+
+    <!-- Add sensor tag to Lidar -->
+    <gazebo reference="rplidar">
+      <sensor name="lidar_2d_v1" type="gpu_ray">
+        <topic>lidar</topic>
+        <ignition_frame_id>lidar_2d_v1</ignition_frame_id>
+        <pose>0 0 0.0525045525 0 0 0</pose>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>90</samples>
+              <resolution>1</resolution>
+              <min_angle>-1.41</min_angle>
+              <max_angle>1.41</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.060</min>
+            <max>10</max>
+            <resolution>0.04</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.001</stddev>
+          </noise>
+        </ray>
+        <always_on>0</always_on>
+        <update_rate>20</update_rate>
+        <visualize>false</visualize>
+      </sensor>
+    </gazebo>
+
+
+  </xacro:if>
 </robot>

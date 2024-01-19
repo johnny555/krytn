@@ -1,24 +1,37 @@
 <?xml version="1.0" ?>
 <sdf version="1.5">
-  <model name="Cafe">
-    <static>true</static>
-    <link name="link">
-      <collision name="main_floor">
-        <pose>-0.4 -0.75 0.0948 0 0 0</pose>
-        <geometry>
-          <box>
-            <size>9.38 22.63 0.19</size>
-          </box>
-        </geometry>
-      </collision>
-
-      <visual name="visual">
+  <model name='gamecity'>
+    <link name='link'>
+      <visual name='visual'>
         <geometry>
           <mesh>
-            <uri>model://gamecity/meshes/gamecity_full.dae</uri>
+            <uri>model://gamecity/meshes/gamecity.dae</uri>
           </mesh>
         </geometry>
       </visual>
+      <collision name='collision'>
+        <geometry>
+          <mesh>
+            <uri>model://gamecity/meshes/gamecity.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <pose>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <enable_wind>false</enable_wind>
     </link>
+    <static>true</static>
+    <self_collide>false</self_collide>
   </model>
 </sdf>
