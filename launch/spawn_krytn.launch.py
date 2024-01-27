@@ -1,11 +1,9 @@
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
-from launch_param_builder import load_xacro
+from launch.actions import IncludeLaunchDescription, ExecuteProcess
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
-from os.path import join 
+from os.path import join
 from launch.substitutions import Command
-from pathlib import Path
 
 def generate_launch_description():
 
@@ -24,7 +22,7 @@ def generate_launch_description():
 
     # Step 1. Process robot file. 
     robot_file = join(get_package_share_directory("krytn"), "robot_description","krytn","krytn.urdf.xacro")
-    robot_xml = load_xacro(Path(robot_file))
+    robot_xml = Command(["xacro ",robot_file])
 
     #Step 2. Publish robot file to ros topic /robot_description & static joint positions to /tf
     robot_state_publisher = Node(
@@ -37,14 +35,9 @@ def generate_launch_description():
     )
 
     # Step 3. Spawn a robot in gazebo by listening to the published topic.
-    robot = Node(
-        package='ros_gz_sim',
-        executable="create",
-        arguments=[
-            "-topic", "robot_description", 
-            "-z", "0.5",
-        ],
-        name="spawn_robot",
+    robot = ExecuteProcess(
+        cmd=["ros2", "run", "ros_gz_sim", "create", "-topic", "robot_description", "-z", "0.5"],
+        name="spawn robot",
         output="both"
     )
 
@@ -52,7 +45,7 @@ def generate_launch_description():
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+        arguments=[
                    '/lidar@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
                    '/lidar/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
                    '/realsense/image@sensor_msgs/msg/Image[gz.msgs.Image',
@@ -78,6 +71,5 @@ def generate_launch_description():
             )
     
 
-    return LaunchDescription([gazebo_sim, bridge, robot, 
-                              robot_steering, robot_state_publisher,
-                              start_controllers])
+    return LaunchDescription([ robot, robot_state_publisher, bridge,
+                              robot_steering, start_controllers])

@@ -68,21 +68,23 @@
 
     <joint name="left_wheel_joint">
       <command_interface name="velocity">
-        <param name="min">-1</param>
-        <param name="max">1</param>
+        <param name="min">-10</param>
+        <param name="max">10</param>
       </command_interface>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
+      <state_interface name="effort" />
     </joint>
 
     <joint name="right_wheel_joint">
       <command_interface name="velocity">
-        <param name="min">-1</param>
-        <param name="max">1</param>
+        <param name="min">-10</param>
+        <param name="max">10</param>
       </command_interface>
 
       <state_interface name="position"/>
       <state_interface name="velocity"/>
+      <state_interface name="effort" />
     </joint>
   </ros2_control>
 
@@ -107,13 +109,13 @@
     </gazebo>
 
     <!-- Add sensor tags to Realsense links -->
-    <gazebo reference="sensor_d435i">
+    <gazebo reference="sensor_d435i_link">
       <sensor name="realsense_d435" type="rgbd_camera">
         <topic>realsense</topic>
-        <ignition_frame_id>realsense_d435</ignition_frame_id>
+        <ignition_frame_id>sensor_d435i_link</ignition_frame_id>
         <update_rate>5</update_rate>
         <camera name="camera">
-          <horizontal_fov>0.5</horizontal_fov>
+          <horizontal_fov>${86/180}</horizontal_fov>
           <lens>
             <intrinsics>
               <!-- fx = fy = width / ( 2 * tan (hfov / 2 ) ) -->
@@ -172,21 +174,21 @@
     <gazebo reference="rplidar">
       <sensor name="lidar_2d_v1" type="gpu_ray">
         <topic>lidar</topic>
-        <ignition_frame_id>lidar_2d_v1</ignition_frame_id>
+        <ignition_frame_id>rplidar</ignition_frame_id>
         <pose>0 0 0.0525045525 0 0 0</pose>
         <ray>
           <scan>
             <horizontal>
-              <samples>90</samples>
+              <samples>180</samples>
               <resolution>1</resolution>
-              <min_angle>-1.41</min_angle>
-              <max_angle>1.41</max_angle>
+              <min_angle>${-pi}</min_angle>
+              <max_angle>${pi}</max_angle>
             </horizontal>
           </scan>
           <range>
-            <min>0.060</min>
-            <max>10</max>
-            <resolution>0.04</resolution>
+            <min>0.06</min>
+            <max>5</max>
+            <resolution>0.01</resolution>
           </range>
           <noise>
             <type>gaussian</type>
