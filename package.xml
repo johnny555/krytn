@@ -15,7 +15,7 @@
   <depend>ros2_control</depend>
   <depend>ign_ros2_control</depend>
   <depend>ros2_controllers</depend>
-  <depend>realsense2-description</depend>
+  <depend>realsense2_description</depend>
 
 
   <test_depend>ament_copyright</test_depend>

@@ -34,6 +34,7 @@ def generate_launch_description():
         output='both',
         parameters=[{'robot_description':robot_xml, 
                      'use_sim_time':True}],
+        namespace="/krytn"
     )
 
     # Step 3. Spawn a robot in gazebo by listening to the published topic.
@@ -41,7 +42,7 @@ def generate_launch_description():
         package='ros_gz_sim',
         executable="create",
         arguments=[
-            "-topic", "robot_description", 
+            "-topic", "/krytn/robot_description", 
             "-z", "0.5",
         ],
         name="spawn_robot",
@@ -73,7 +74,8 @@ def generate_launch_description():
     start_controllers  = Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=['joint_state_broadcaster', 'diff_drive_base_controller'],
+                arguments=["-c","/krytn/controller_manager",
+                             'joint_state_broadcaster', 'diff_drive_base_controller'],
                 output="screen",
             )
     

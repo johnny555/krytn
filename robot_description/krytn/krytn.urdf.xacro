@@ -92,10 +92,12 @@
   <xacro:if value="$(arg gazebo)">
     <gazebo>
       <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+        <controller_manager_prefix_node_name>/krytn</controller_manager_prefix_node_name>
         <ros>
-          <remapping>/diff_drive_base_controller/odometry:=odom</remapping>
-          <remapping>/diff_drive_base_controller/tf_odometry:=tf</remapping>
-          <remapping>/diff_drive_base_controller/cmd_vel_unstamped:=cmd_vel</remapping>
+          <remapping>diff_drive_base_controller/odometry:=odom</remapping>
+          <remapping>diff_drive_base_controller/tf_odometry:=tf</remapping>
+          <remapping>diff_drive_base_controller/cmd_vel_unstamped:=cmd_vel</remapping>
+          <namespace>/krytn</namespace>
         </ros>
         <parameters>$(find krytn)/config/diffdrive_control.yaml</parameters>
       </plugin>

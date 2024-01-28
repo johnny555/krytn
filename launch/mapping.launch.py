@@ -19,7 +19,6 @@ def generate_launch_description():
 
     base_path = get_package_share_directory("krytn")
         
-
     # SLAM Toolbox for mapping
     slam_toolbox = Node( package='slam_toolbox', 
                          executable='async_slam_toolbox_node', 
@@ -36,7 +35,6 @@ def generate_launch_description():
             PathJoinSubstitution([base_path, 'config', rviz_config])
         ]
     )
-
 
     return LaunchDescription([slam_toolbox, 
                                 rviz, 

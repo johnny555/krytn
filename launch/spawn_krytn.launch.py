@@ -7,13 +7,6 @@ from launch.substitutions import Command
 
 def generate_launch_description():
 
-    # Start a simulation with the cafe world
-    cafe_world_uri = join(get_package_share_directory("krytn"), "models", "gamecity_world.sdf")
-    path = join(get_package_share_directory("ros_gz_sim"), "launch", "gz_sim.launch.py")
-    
-    gazebo_sim = IncludeLaunchDescription(path,
-                                          launch_arguments=[("gz_args", '-r ' + cafe_world_uri)])
-
     # Create a robot in the world.
     # Steps: 
     # 1. Process a file using the xacro tool to get an xml file containing the robot description.
@@ -31,12 +24,15 @@ def generate_launch_description():
         name='robot_state_publisher',
         output='both',
         parameters=[{'robot_description':robot_xml, 
-                     'use_sim_time':True}],
+                     'use_sim_time':True, 
+                     'tf_prefix': '/krytn'}],
+        namespace="/krytn",
+        
     )
 
     # Step 3. Spawn a robot in gazebo by listening to the published topic.
     robot = ExecuteProcess(
-        cmd=["ros2", "run", "ros_gz_sim", "create", "-topic", "robot_description", "-z", "0.5"],
+        cmd=["ros2", "run", "ros_gz_sim", "create", "-topic", "/krytn/robot_description", "-z", "0.5"],
         name="spawn robot",
         output="both"
     )
@@ -53,7 +49,8 @@ def generate_launch_description():
                    '/realsense/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
                    '/imu@sensor_msgs/msg/Imu[ignition.msgs.IMU'
                    ],
-        output='screen'
+        output='screen',
+        parameters=[("tf_prefix","/krytn")]
         )
 
     # A gui tool for easy tele-operation.
@@ -66,10 +63,10 @@ def generate_launch_description():
     start_controllers  = Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=['joint_state_broadcaster', 'diff_drive_base_controller'],
+                arguments=[ '-c', "/krytn/controller_manager",
+                    'joint_state_broadcaster', 'diff_drive_base_controller'],
                 output="screen",
             )
     
-
     return LaunchDescription([ robot, robot_state_publisher, bridge,
                               robot_steering, start_controllers])

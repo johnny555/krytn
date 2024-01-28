@@ -9,6 +9,7 @@
           </mesh>
         </geometry>
       </visual>
+      <!-- 
       <collision name='collision'>
         <geometry>
           <mesh>
@@ -16,6 +17,7 @@
           </mesh>
         </geometry>
       </collision>
+      -->
       <pose>0 0 0 0 -0 0</pose>
       <inertial>
         <pose>0 0 0 0 -0 0</pose>
