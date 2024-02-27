@@ -18,7 +18,10 @@ def generate_launch_description():
     rviz_config = LaunchConfiguration('rviz_config', default="view.rviz")
 
     base_path = get_package_share_directory("krytn")
-        
+    # Include the gazebo setup
+    gazebo = IncludeLaunchDescription(join(base_path, "launch","gazebo.launch.py"))
+
+
     # SLAM Toolbox for mapping
     slam_toolbox = Node( package='slam_toolbox', 
                          executable='async_slam_toolbox_node', 
@@ -36,6 +39,6 @@ def generate_launch_description():
         ]
     )
 
-    return LaunchDescription([slam_toolbox, 
+    return LaunchDescription([gazebo, slam_toolbox, 
                                 rviz, 
                                 rviz_config_arg])
