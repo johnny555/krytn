@@ -5,16 +5,16 @@
 """
 
 from launch import LaunchDescription
-from launch_ros.actions import Node 
+from launch_ros.actions import Node , SetRemap
 from ament_index_python.packages import get_package_share_directory
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, GroupAction
 from os.path import join
 
 def generate_launch_description():
 
-    base_path = get_package_share_directory("start_creating_robots")
+    base_path = get_package_share_directory("krytn")
 
     # We will include everything from the mapping launch file, making sure that sensors are now enabled and setting up RVIZ for navigation.
     gazebo_and_mapping = IncludeLaunchDescription(join(base_path, "launch","mapping.launch.py"),
@@ -26,10 +26,13 @@ def generate_launch_description():
         launch_arguments={
             'map_subscribe_transient_local': 'true',
             'use_sim_time': 'true',
-            'params_file': get_package_share_directory('start_creating_robots') + '/config/navigation.yaml'
-        }.items()
+            'params_file': get_package_share_directory('krytn') + '/config/navigation.yaml'
+        }.items(),
     )
+    remap = SetRemap("cmd_vel","/krytn/cmd_vel")
+
+    nav_remapped = GroupAction(actions=[remap, navigation])
 
     return LaunchDescription([
-        gazebo_and_mapping, navigation
+        gazebo_and_mapping, nav_remapped
     ])
