@@ -64,6 +64,11 @@ def generate_launch_description():
         output='screen'
         )
 
+    # The controller is setup to put everything in the /krytn frame. We need to construct a static transform to bring it back into the un-namespaced frames. 
+    static_pub = Node(package="tf2_ros", 
+                      executable="static_transform_publisher",
+                      arguments=["0","0","0","0","0","0", "/krytn/base_footprint", "base_footprint"])
+
     # A gui tool for easy tele-operation.
     robot_steering = Node(
         package="rqt_robot_steering",
@@ -80,6 +85,8 @@ def generate_launch_description():
             )
     
 
-    return LaunchDescription([gazebo_sim, bridge, robot, 
+    
+
+    return LaunchDescription([gazebo_sim, bridge, static_pub, robot, 
                               robot_steering, robot_state_publisher,
                               start_controllers])
