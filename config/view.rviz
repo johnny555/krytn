@@ -291,42 +291,31 @@ Visualization Manager:
         odom:
           base_footprint:
             base_link:
-              left_caster_wheel:
-                {}
-              left_wheel:
-                {}
-              right_caster_wheel:
-                {}
-              right_wheel:
-                {}
-              rplidar:
-                {}
+              left_caster_wheel: {}
+              left_wheel: {}
+              right_caster_wheel: {}
+              right_wheel: {}
+              rplidar: {}
               sensor_d435i_bottom_screw_frame:
                 sensor_d435i_link:
                   sensor_d435i_accel_frame:
-                    sensor_d435i_accel_optical_frame:
-                      {}
+                    sensor_d435i_accel_optical_frame: {}
                   sensor_d435i_color_frame:
-                    sensor_d435i_color_optical_frame:
-                      {}
+                    sensor_d435i_color_optical_frame: {}
                   sensor_d435i_depth_frame:
-                    sensor_d435i_depth_optical_frame:
-                      {}
+                    sensor_d435i_depth_optical_frame: {}
                   sensor_d435i_gyro_frame:
-                    sensor_d435i_gyro_optical_frame:
-                      {}
+                    sensor_d435i_gyro_optical_frame: {}
                   sensor_d435i_infra1_frame:
-                    sensor_d435i_infra1_optical_frame:
-                      {}
+                    sensor_d435i_infra1_optical_frame: {}
                   sensor_d435i_infra2_frame:
-                    sensor_d435i_infra2_optical_frame:
-                      {}
+                    sensor_d435i_infra2_optical_frame: {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: odom
+    Fixed Frame: /krytn/odom
     Frame Rate: 30
   Name: root
   Tools:
