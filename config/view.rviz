@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /RobotModel1
         - /RobotModel1/Description Topic1
       Splitter Ratio: 0.49117645621299744
     Tree Height: 555
@@ -58,7 +59,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robot_description
+        Value: /krytn/robot_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -242,11 +243,15 @@ Visualization Manager:
           Value: true
         base_link:
           Value: true
+        krytn/base_footprint:
+          Value: true
+        krytn/odom:
+          Value: true
         left_caster_wheel:
           Value: true
         left_wheel:
           Value: true
-        odom:
+        map:
           Value: true
         right_caster_wheel:
           Value: true
@@ -288,34 +293,48 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        odom:
-          base_footprint:
-            base_link:
-              left_caster_wheel: {}
-              left_wheel: {}
-              right_caster_wheel: {}
-              right_wheel: {}
-              rplidar: {}
-              sensor_d435i_bottom_screw_frame:
-                sensor_d435i_link:
-                  sensor_d435i_accel_frame:
-                    sensor_d435i_accel_optical_frame: {}
-                  sensor_d435i_color_frame:
-                    sensor_d435i_color_optical_frame: {}
-                  sensor_d435i_depth_frame:
-                    sensor_d435i_depth_optical_frame: {}
-                  sensor_d435i_gyro_frame:
-                    sensor_d435i_gyro_optical_frame: {}
-                  sensor_d435i_infra1_frame:
-                    sensor_d435i_infra1_optical_frame: {}
-                  sensor_d435i_infra2_frame:
-                    sensor_d435i_infra2_optical_frame: {}
+        krytn/odom:
+          krytn/base_footprint:
+            base_footprint:
+              base_link:
+                left_caster_wheel:
+                  {}
+                left_wheel:
+                  {}
+                right_caster_wheel:
+                  {}
+                right_wheel:
+                  {}
+                rplidar:
+                  {}
+                sensor_d435i_bottom_screw_frame:
+                  sensor_d435i_link:
+                    sensor_d435i_accel_frame:
+                      sensor_d435i_accel_optical_frame:
+                        {}
+                    sensor_d435i_color_frame:
+                      sensor_d435i_color_optical_frame:
+                        {}
+                    sensor_d435i_depth_frame:
+                      sensor_d435i_depth_optical_frame:
+                        {}
+                    sensor_d435i_gyro_frame:
+                      sensor_d435i_gyro_optical_frame:
+                        {}
+                    sensor_d435i_infra1_frame:
+                      sensor_d435i_infra1_optical_frame:
+                        {}
+                    sensor_d435i_infra2_frame:
+                      sensor_d435i_infra2_optical_frame:
+                        {}
+        map:
+          {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: /krytn/odom
+    Fixed Frame: krytn/odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -358,25 +377,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 16.256221771240234
+      Distance: 4.4431867599487305
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.7770906686782837
-        Y: 0.5062927007675171
-        Z: 0.619575560092926
+        X: -0.06950462609529495
+        Y: -0.07056699693202972
+        Z: -0.3206624984741211
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: 0.6997970938682556
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.923580169677734
+      Yaw: 5.5635833740234375
     Saved: ~
 Window Geometry:
   Displays:
@@ -394,5 +413,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 1171
-  Y: 153
+  X: 1139
+  Y: 121
