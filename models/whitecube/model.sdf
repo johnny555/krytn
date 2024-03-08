@@ -5,7 +5,7 @@
       <visual name='visual'>
         <geometry>
           <mesh>
-            <uri>model://gamecity/meshes/gamecity.dae</uri>
+            <uri>model://whitecube/meshes/whitecube.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -13,7 +13,7 @@
       <collision name='collision'>
         <geometry>
           <mesh>
-            <uri>model://simple_gamecity/meshes/simple_gamecity.dae</uri>
+            <uri>model://whitecube/meshes/whitecube.dae</uri>
           </mesh>
         </geometry>
       </collision>
@@ -33,7 +33,7 @@
       </inertial>
       <enable_wind>false</enable_wind>
     </link>
-    <static>true</static>
+    <static>false</static>
     <self_collide>false</self_collide>
   </model>
 </sdf>
