@@ -9,7 +9,7 @@
   <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro" />
   <!-- Including realsense description from external package -->
   <xacro:sensor_d435i parent="base_link" name="sensor_d435i" use_nominal_extrinsics="$(arg gazebo)">
-    <origin xyz="0 0 0.3" rpy="0 0 0"/>
+    <origin rpy="0.0 -0.0 0.0" xyz="0.02 0.0 0.435"/>
   </xacro:sensor_d435i>
 
   <!-- Adding a simple rplidar for collision avoidance.  -->
@@ -206,4 +206,20 @@
 
 
   </xacro:if>
+
+
+  <link name="tray_link">
+    <visual name="visual">
+      <geometry>
+        <mesh filename="file://$(find krytn)/robot_description/krytn/meshes/tray.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="tray_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="tray_link"/>
+    <origin rpy="0.0 -0.0 0.0" xyz="0.03 0.0 0.25"/>
+  </joint>
+
+
 </robot>
