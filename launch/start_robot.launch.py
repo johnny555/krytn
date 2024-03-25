@@ -12,7 +12,7 @@ from os.path import join
 
 def generate_launch_description():
 
-    base_path = get_package_share_directory("haul_truck")
+    base_path = get_package_share_directory("krytn")
     nav = IncludeLaunchDescription(join(base_path, "launch","navigation.launch.py"))
 
     return LaunchDescription([nav])
