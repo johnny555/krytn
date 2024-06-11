@@ -16,6 +16,8 @@
   <depend>ign_ros2_control</depend>
   <depend>ros2_controllers</depend>
   <depend>realsense2_description</depend>
+  <depend>python3-flask</depend>
+  <depend>rosbridge_suite</depend>
 
 
   <test_depend>ament_copyright</test_depend>

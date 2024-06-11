@@ -13,7 +13,7 @@ def create_datafiles():
             (join('share/',  package_name, "config"), glob("config/*.*")),
             ('share/' + package_name, ['package.xml']),
             ]
-    for complex_path in ["robot_description","models"]:
+    for complex_path in ["robot_description","models", "krytn"]:
         res = get_all_files_in_path(glob_string=f"{complex_path}/**/*.*", path_string=join("share",package_name))
         df.extend(res) 
     return df
@@ -32,7 +32,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'move_krytn = krytn.move_krytn:main'
+            'move_krytn = krytn.move_krytn:main',
+            'krytn_web = krytn.krytn_web:main'
         ],
     },
 )
