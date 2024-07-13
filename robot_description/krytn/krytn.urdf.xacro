@@ -45,11 +45,11 @@
 
 
   <!-- Configure Control of Joints -->
-  <ros2_control name="magni" type="system">
+  <ros2_control name="Krytn" type="system">
 
     <xacro:if value="${$(arg gazebo) == True}">
       <hardware>
-        <plugin>ign_ros2_control/IgnitionSystem</plugin>
+        <plugin>gz_ros2_control/GazeboSimSystem</plugin>
       </hardware>
     </xacro:if>
 
@@ -91,7 +91,7 @@
   <!-- Setup Gazebo plugins -->
   <xacro:if value="$(arg gazebo)">
     <gazebo>
-      <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+      <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
         <controller_manager_prefix_node_name>/krytn</controller_manager_prefix_node_name>
         <ros>
           <remapping>diff_drive_base_controller/odometry:=odom</remapping>
@@ -102,12 +102,13 @@
         <parameters>$(find krytn)/config/diffdrive_control.yaml</parameters>
       </plugin>
 
-      <plugin filename="ignition-gazebo-imu-system" name="gz::sim::systems::Imu">
+      <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu">
       </plugin>
 
-      <plugin filename="ignition-gazebo-sensors-system" name="ignition::gazebo::systems::Sensors">
+      <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
         <render_engine>ogre2</render_engine>
       </plugin>
+
     </gazebo>
 
     <!-- Add sensor tags to Realsense links -->
