@@ -12,6 +12,14 @@
     <origin xyz="0 0 0.3" rpy="0 0 0"/>
   </xacro:sensor_d435i>
 
+  <gazebo reference="sensor_d435i_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://realsense2_description/meshes/d435.dae" />
+      </geometry>
+    </visual>
+  </gazebo>
+
   <!-- Adding a simple rplidar for collision avoidance.  -->
   <link name="rplidar">
     <xacro:cylinder_inertial_with_origin radius="0.02" length="0.35" mass="0.13">
@@ -94,9 +102,9 @@
       <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
         <controller_manager_prefix_node_name>/krytn</controller_manager_prefix_node_name>
         <ros>
-          <remapping>diff_drive_base_controller/odometry:=odom</remapping>
-          <remapping>diff_drive_base_controller/tf_odometry:=tf</remapping>
-          <remapping>diff_drive_base_controller/cmd_vel_unstamped:=cmd_vel</remapping>
+          <remapping>/krytn/diff_drive_base_controller/odometry:=odom</remapping>
+          <remapping>/krytn/diff_drive_base_controller/tf_odometry:=tf</remapping>
+          <remapping>/krytn/diff_drive_base_controller/cmd_vel_unstamped:=cmd_vel</remapping>
           <namespace>/krytn</namespace>
         </ros>
         <parameters>$(find krytn)/config/diffdrive_control.yaml</parameters>
@@ -115,7 +123,7 @@
     <gazebo reference="sensor_d435i_link">
       <sensor name="realsense_d435" type="rgbd_camera">
         <topic>realsense</topic>
-        <ignition_frame_id>sensor_d435i_link</ignition_frame_id>
+        <gazebo_frame_id>sensor_d435i_link</gazebo_frame_id>
         <update_rate>5</update_rate>
         <camera name="camera">
           <horizontal_fov>${86/180}</horizontal_fov>
@@ -177,7 +185,7 @@
     <gazebo reference="rplidar">
       <sensor name="lidar_2d_v1" type="gpu_ray">
         <topic>lidar</topic>
-        <ignition_frame_id>rplidar</ignition_frame_id>
+        <gazebo_frame_id>rplidar</gazebo_frame_id>
         <pose>0 0 0.0525045525 0 0 0</pose>
         <ray>
           <scan>
