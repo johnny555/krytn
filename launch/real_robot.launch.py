@@ -50,7 +50,7 @@ def generate_launch_description():
     twister = Node(
         package="twist_stamper",
         executable="twist_stamper",
-        remappings=[("/cmd_vel_in",'/cmd_vel'),("/cmd_vel_out","/diff_drive_base_controller/cmd_vel")]
+        remappings=[("/cmd_vel_in",'/cmd_vel'),("/cmd_vel_out","/krytn/diff_drive_base_controller/cmd_vel")]
     )
     
     return LaunchDescription([ manager, robot_state_publisher, 
