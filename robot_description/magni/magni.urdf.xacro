@@ -6,17 +6,11 @@
   <xacro:include filename="$(find krytn)/robot_description/magni/inertial.xacro" />
 
   <xacro:macro name="low_friction">
-    <collision>
-      <surface>
-        <friction>
-          <mu>0.1</mu>
-          <mu1>0.1</mu1>
-          <mu2>0.1</mu2>
-          <slip1>0</slip1>
-          <slip2>0</slip2>
-        </friction>
-      </surface>
-    </collision>
+    <mu>0.1</mu>
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <slip1>0</slip1>
+    <slip2>0</slip2>
   </xacro:macro>
 
   <xacro:macro name="high_friction">
@@ -29,6 +23,8 @@
             <fdir1>0 0 1</fdir1>
             <slip1>0.0</slip1>
             <slip2>0.0</slip2>
+            <min_depth>0.001</min_depth>
+            <kp>1e8</kp>
           </ode>
         </friction>
       </surface>
