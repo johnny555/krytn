@@ -14,7 +14,7 @@ def generate_launch_description():
     path = join(get_package_share_directory("ros_gz_sim"), "launch", "gz_sim.launch.py")
     
     gazebo_sim = IncludeLaunchDescription(path,
-                                          launch_arguments=[("gz_args", '-r '+ "empty.sdf")])
+                                          launch_arguments=[("gz_args", '-r ' + cafe_world_uri)])
 
     # Create a robot in the world.
     # Steps: 
