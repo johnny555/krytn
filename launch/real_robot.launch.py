@@ -7,6 +7,9 @@ from launch.substitutions import Command
 
 def generate_launch_description():
 
+    base_path = get_package_share_directory("krytn")
+
+
     # Create a robot in the world.
     # Steps: 
     # 1. Process a file using the xacro tool to get an xml file containing the robot description.
@@ -24,8 +27,7 @@ def generate_launch_description():
         name='robot_state_publisher',
         output='both',
         parameters=[{'robot_description':robot_xml, 
-                     }],
-        namespace="/krytn"        
+                     }]       
     )
 
     # Step 5: Enable the ros2 controllers
@@ -34,15 +36,13 @@ def generate_launch_description():
                 executable="ros2_control_node",
                 output="screen",
                 parameters=[join(get_package_share_directory('krytn'),'config','diffdrive_control.yaml')],
-                namespace="/krytn"
-
             )
 
     # Step 5: Enable the ros2 controllers
     start_controllers  = Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=[ '-c', "/krytn/controller_manager",
+                arguments=[
                     'joint_state_broadcaster', 'diff_drive_base_controller'],
                 output="screen",
             )
@@ -50,8 +50,10 @@ def generate_launch_description():
     twister = Node(
         package="twist_stamper",
         executable="twist_stamper",
-        remappings=[("/cmd_vel_in",'/cmd_vel'),("/cmd_vel_out","/krytn/diff_drive_base_controller/cmd_vel")]
+        remappings=[("/cmd_vel_in",'/cmd_vel'),("/cmd_vel_out","/diff_drive_base_controller/cmd_vel")]
     )
+
+    sensors = IncludeLaunchDescription(join(base_path, 'launch','sensors.launch.py'))
     
     return LaunchDescription([ manager, robot_state_publisher, 
-                               start_controllers, twister])
+                               start_controllers, twister, sensors])

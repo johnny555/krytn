@@ -13,12 +13,12 @@
   <depend>navigation2</depend>
   <depend>nav2_bringup</depend>
   <depend>ros2_control</depend>
-  <depend>ign_ros2_control</depend>
   <depend>ros2_controllers</depend>
   <depend>realsense2_description</depend>
   <depend>python3-flask</depend>
-  <depend>rosbridge_suite</depend>
-
+  <depend>rplidar_ros</depend>
+  <depend>realsense2_camera</depend>
+  <depend>libcamera</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
